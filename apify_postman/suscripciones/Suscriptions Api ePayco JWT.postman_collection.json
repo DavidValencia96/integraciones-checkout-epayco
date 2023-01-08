@@ -1,0 +1,1199 @@
+{
+	"info": {
+		"_postman_id": "f6b03d04-7070-4d4f-ade6-894fc32896e2",
+		"name": "Suscriptions Api ePayco JWT",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+		"_exporter_id": "14344223"
+	},
+	"item": [
+		{
+			"name": "Login",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"var data = JSON.parse(responseBody);",
+							"if(data.status){",
+							"postman.setEnvironmentVariable(\"jwt_token\", data.bearer_token);",
+							"}"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "Content-Type",
+						"value": "application/json"
+					},
+					{
+						"key": "type",
+						"value": "sdk"
+					},
+					{
+						"key": "Accept",
+						"value": "application/json"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n    \"public_key\":\"{{PUBLIC_KEY}}\",\r\n    \"private_key\":\"{{private_key}}\"\r\n}"
+				},
+				"url": {
+					"raw": "{{BASE_URL}}/v1/auth/login",
+					"host": [
+						"{{BASE_URL}}"
+					],
+					"path": [
+						"v1",
+						"auth",
+						"login"
+					]
+				},
+				"description": "Create JWT token"
+			},
+			"response": []
+		},
+		{
+			"name": "Create Token JWT",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"var data = JSON.parse(responseBody);",
+							"if(data.status){",
+							"postman.setEnvironmentVariable(\"id_token\", data.id);",
+							"}"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"auth": {
+					"type": "bearer",
+					"bearer": [
+						{
+							"key": "token",
+							"value": "{{jwt_token}}",
+							"type": "string"
+						}
+					]
+				},
+				"method": "POST",
+				"header": [
+					{
+						"key": "Content-Type",
+						"value": "application/json"
+					},
+					{
+						"key": "type",
+						"value": "sdk-jwt"
+					},
+					{
+						"key": "Accept",
+						"value": "application/json"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n    \"card[number]\":\"{{CARD}}\",\r\n    \"card[exp_year]\":\"2025\",\r\n    \"card[exp_month]\":\"12\",\r\n    \"card[cvc]\":\"123\"\r\n}"
+				},
+				"url": {
+					"raw": "{{BASE_URL}}/v1/tokens",
+					"host": [
+						"{{BASE_URL}}"
+					],
+					"path": [
+						"v1",
+						"tokens"
+					]
+				},
+				"description": "$token = $epayco->token->create(array(\r\n    \"card[number]\" => '4575623182290326',\r\n    \"card[exp_year]\" => \"2017\",\r\n    \"card[exp_month]\" => \"07\",\r\n    \"card[cvc]\" => \"123\"\r\n));"
+			},
+			"response": []
+		},
+		{
+			"name": "Delete Token JWT",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							""
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"auth": {
+					"type": "bearer",
+					"bearer": [
+						{
+							"key": "token",
+							"value": "{{jwt_token}}",
+							"type": "string"
+						}
+					]
+				},
+				"method": "POST",
+				"header": [
+					{
+						"key": "Content-Type",
+						"value": "application/json"
+					},
+					{
+						"key": "type",
+						"value": "sdk-jwt"
+					},
+					{
+						"key": "Accept",
+						"value": "application/json"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n    \"franchise\": \"visa\",\r\n    \"mask\":\"457562******0326\",\r\n\t\"customer_id\":\"{{id_client}}\"\r\n}"
+				},
+				"url": {
+					"raw": "{{BASE_URL}}/v1/remove/tokens",
+					"host": [
+						"{{BASE_URL}}"
+					],
+					"path": [
+						"v1",
+						"remove",
+						"tokens"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Set Token Default JWT",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							""
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"auth": {
+					"type": "bearer",
+					"bearer": [
+						{
+							"key": "token",
+							"value": "{{jwt_token}}",
+							"type": "string"
+						}
+					]
+				},
+				"method": "POST",
+				"header": [
+					{
+						"key": "Content-Type",
+						"value": "application/json"
+					},
+					{
+						"key": "type",
+						"value": "sdk-jwt"
+					},
+					{
+						"key": "Accept",
+						"value": "application/json"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n    \"franchise\": \"visa\",\r\n    \"token\": \"**********wKA9sW\",\r\n    \"mask\":\"457562******0326\",\r\n\t\"customer_id\":\"{{id_client}}\"\r\n}"
+				},
+				"url": {
+					"raw": "{{BASE_URL}}/payment/v1/customer/reasign/card/default",
+					"host": [
+						"{{BASE_URL}}"
+					],
+					"path": [
+						"payment",
+						"v1",
+						"customer",
+						"reasign",
+						"card",
+						"default"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Create Customer JWT",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"type": "text/javascript",
+						"exec": [
+							"var data = JSON.parse(responseBody);",
+							"postman.setEnvironmentVariable(\"id_client\", data.data.customerId);"
+						]
+					}
+				}
+			],
+			"request": {
+				"auth": {
+					"type": "bearer",
+					"bearer": [
+						{
+							"key": "token",
+							"value": "{{jwt_token}}",
+							"type": "string"
+						}
+					]
+				},
+				"method": "POST",
+				"header": [
+					{
+						"key": "Content-Type",
+						"value": "application/json"
+					},
+					{
+						"key": "type",
+						"value": "sdk-jwt"
+					},
+					{
+						"key": "Accept",
+						"value": "application/json"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n    \"token_card\": \"{{id_token}}\",\r\n    \"name\":  \"Joe Doe\",\r\n    \"email\": \"joe@payco.co\",\r\n    \"phone\": \"1234567899\",\r\n    \"default\": \"true\",\r\n    \"address\": \"cr 44 66 55\",\r\n    \"indicative\": \"01\",\r\n    \"country\": \"CO\",\r\n    \"city\": \"medellin\"\r\n}"
+				},
+				"url": {
+					"raw": "{{BASE_URL}}/payment/v1/customer/create",
+					"host": [
+						"{{BASE_URL}}"
+					],
+					"path": [
+						"payment",
+						"v1",
+						"customer",
+						"create"
+					]
+				},
+				"description": "$token = $epayco->token->create(array(\r\n    \"card[number]\" => '4575623182290326',\r\n    \"card[exp_year]\" => \"2017\",\r\n    \"card[exp_month]\" => \"07\",\r\n    \"card[cvc]\" => \"123\"\r\n));"
+			},
+			"response": []
+		},
+		{
+			"name": "Create Customer WhitOut Token JWT",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"type": "text/javascript",
+						"exec": [
+							"var data = JSON.parse(responseBody);",
+							"if(data.status){",
+							"postman.setEnvironmentVariable(\"id_client\", data.data.customerId);",
+							"}else{",
+							"    ",
+							"}"
+						]
+					}
+				}
+			],
+			"request": {
+				"auth": {
+					"type": "bearer",
+					"bearer": [
+						{
+							"key": "token",
+							"value": "{{jwt_token}}",
+							"type": "string"
+						}
+					]
+				},
+				"method": "POST",
+				"header": [
+					{
+						"key": "Content-Type",
+						"value": "application/json"
+					},
+					{
+						"key": "type",
+						"value": "sdk-jwt"
+					},
+					{
+						"key": "Accept",
+						"value": "application/json"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n    \"name\":  \"Joe Doe\",\r\n    \"email\": \"joe_test@payco.co\",\r\n    \"phone\": \"1234567899\",\r\n    \"default\": \"true\",\r\n    \"require_card\": false\r\n}"
+				},
+				"url": {
+					"raw": "{{BASE_URL}}/payment/v1/customer/create",
+					"host": [
+						"{{BASE_URL}}"
+					],
+					"path": [
+						"payment",
+						"v1",
+						"customer",
+						"create"
+					]
+				},
+				"description": "$token = $epayco->token->create(array(\r\n    \"card[number]\" => '4575623182290326',\r\n    \"card[exp_year]\" => \"2017\",\r\n    \"card[exp_month]\" => \"07\",\r\n    \"card[cvc]\" => \"123\"\r\n));"
+			},
+			"response": []
+		},
+		{
+			"name": "Get Customer JWT",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"type": "text/javascript",
+						"exec": [
+							"var data = JSON.parse(responseBody);",
+							"if(data.status){",
+							"postman.setEnvironmentVariable(\"id_client\", data.data.id_customer);",
+							"}"
+						]
+					}
+				}
+			],
+			"protocolProfileBehavior": {
+				"disableBodyPruning": true
+			},
+			"request": {
+				"auth": {
+					"type": "bearer",
+					"bearer": [
+						{
+							"key": "token",
+							"value": "{{jwt_token}}",
+							"type": "string"
+						}
+					]
+				},
+				"method": "GET",
+				"header": [
+					{
+						"key": "Content-Type",
+						"value": "application/json"
+					},
+					{
+						"key": "type",
+						"value": "sdk-jwt"
+					},
+					{
+						"key": "Accept",
+						"value": "application/json"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n    \"token_card\": \"{{id_token}}\",\r\n    \"name\":  \"Joe Doe\",\r\n    \"email\": \"joe@payco.co\",\r\n    \"phone\": \"3005234321\",\r\n    \"default\": \"true\"\r\n}"
+				},
+				"url": {
+					"raw": "{{BASE_URL}}/payment/v1/customer/{{id_client}}",
+					"host": [
+						"{{BASE_URL}}"
+					],
+					"path": [
+						"payment",
+						"v1",
+						"customer",
+						"{{id_client}}"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Get All Customers JWT",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"type": "text/javascript",
+						"exec": [
+							"var data = JSON.parse(responseBody);",
+							"if(data.status){",
+							"postman.setEnvironmentVariable(\"id_client\", data.data.id_customer);",
+							"}"
+						]
+					}
+				}
+			],
+			"protocolProfileBehavior": {
+				"disableBodyPruning": true
+			},
+			"request": {
+				"auth": {
+					"type": "bearer",
+					"bearer": [
+						{
+							"key": "token",
+							"value": "{{jwt_token}}",
+							"type": "string"
+						}
+					]
+				},
+				"method": "GET",
+				"header": [
+					{
+						"key": "Content-Type",
+						"value": "application/json"
+					},
+					{
+						"key": "type",
+						"value": "sdk-jwt"
+					},
+					{
+						"key": "Accept",
+						"value": "application/json"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n    \"token_card\": \"{{id_token}}\",\r\n    \"name\":  \"Joe Doe\",\r\n    \"email\": \"joe@payco.co\",\r\n    \"phone\": \"3005234321\",\r\n    \"default\": \"true\"\r\n}"
+				},
+				"url": {
+					"raw": "{{BASE_URL}}/payment/v1/customers",
+					"host": [
+						"{{BASE_URL}}"
+					],
+					"path": [
+						"payment",
+						"v1",
+						"customers"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Create Plan JWT",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"var data = JSON.parse(responseBody);",
+							"if(data.status){",
+							"postman.setEnvironmentVariable(\"id_plan\", data.data.id_plan);",
+							"}else{",
+							"   postman.setEnvironmentVariable(\"id_plan\", data.data.errors); ",
+							"}"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"auth": {
+					"type": "bearer",
+					"bearer": [
+						{
+							"key": "token",
+							"value": "{{jwt_token}}",
+							"type": "string"
+						}
+					]
+				},
+				"method": "POST",
+				"header": [
+					{
+						"key": "Content-Type",
+						"value": "application/json"
+					},
+					{
+						"key": "type",
+						"value": "sdk-jwt"
+					},
+					{
+						"key": "Accept",
+						"value": "application/json"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n   \"id_plan\": \"Suscripcion1\",\r\n   \"name\": \"Suscripcion1\",\r\n   \"description\": \"Suscripcion1\",\r\n   \"amount\": 5000,\r\n   \"currency\": \"cop\",\r\n   \"interval\": \"month\",\r\n   \"interval_count\": 1,\r\n   \"trial_days\": 0\r\n}"
+				},
+				"url": {
+					"raw": "{{BASE_URL}}/recurring/v1/plan/create",
+					"host": [
+						"{{BASE_URL}}"
+					],
+					"path": [
+						"recurring",
+						"v1",
+						"plan",
+						"create"
+					]
+				},
+				"description": "$token = $epayco->token->create(array(\r\n    \"card[number]\" => '4575623182290326',\r\n    \"card[exp_year]\" => \"2017\",\r\n    \"card[exp_month]\" => \"07\",\r\n    \"card[cvc]\" => \"123\"\r\n));"
+			},
+			"response": []
+		},
+		{
+			"name": "Update Plan JWT",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							""
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"auth": {
+					"type": "bearer",
+					"bearer": [
+						{
+							"key": "token",
+							"value": "{{jwt_token}}",
+							"type": "string"
+						}
+					]
+				},
+				"method": "POST",
+				"header": [
+					{
+						"key": "Content-Type",
+						"value": "application/json"
+					},
+					{
+						"key": "type",
+						"value": "sdk-jwt"
+					},
+					{
+						"key": "Accept",
+						"value": "application/json"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n   \"name\": \"Course Angular 5\",\r\n   \"description\": \"Course angular 5 and typescript\",\r\n   \"amount\": 30000,\r\n   \"currency\": \"cop\",\r\n   \"interval\": \"month\",\r\n   \"interval_count\": 1,\r\n   \"trial_days\": 1\r\n}"
+				},
+				"url": {
+					"raw": "{{BASE_URL}}/recurring/v1/plan/edit/{{id_plan}}",
+					"host": [
+						"{{BASE_URL}}"
+					],
+					"path": [
+						"recurring",
+						"v1",
+						"plan",
+						"edit",
+						"{{id_plan}}"
+					]
+				},
+				"description": "$token = $epayco->token->create(array(\r\n    \"card[number]\" => '4575623182290326',\r\n    \"card[exp_year]\" => \"2017\",\r\n    \"card[exp_month]\" => \"07\",\r\n    \"card[cvc]\" => \"123\"\r\n));"
+			},
+			"response": []
+		},
+		{
+			"name": "Get Plan JWT",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"type": "text/javascript",
+						"exec": [
+							"var data = JSON.parse(responseBody);",
+							"if(data.status){",
+							"postman.setEnvironmentVariable(\"id_plan\", data.plan.id_plan);",
+							"}"
+						]
+					}
+				}
+			],
+			"request": {
+				"auth": {
+					"type": "bearer",
+					"bearer": [
+						{
+							"key": "token",
+							"value": "{{jwt_token}}",
+							"type": "string"
+						}
+					]
+				},
+				"method": "GET",
+				"header": [
+					{
+						"key": "Content-Type",
+						"value": "application/json"
+					},
+					{
+						"key": "type",
+						"value": "sdk-jwt"
+					},
+					{
+						"key": "Accept",
+						"value": "application/json"
+					}
+				],
+				"url": {
+					"raw": "{{BASE_URL}}/recurring/v1/plan/{{id_plan}}",
+					"host": [
+						"{{BASE_URL}}"
+					],
+					"path": [
+						"recurring",
+						"v1",
+						"plan",
+						"{{id_plan}}"
+					]
+				},
+				"description": "$token = $epayco->token->create(array(\r\n    \"card[number]\" => '4575623182290326',\r\n    \"card[exp_year]\" => \"2017\",\r\n    \"card[exp_month]\" => \"07\",\r\n    \"card[cvc]\" => \"123\"\r\n));"
+			},
+			"response": []
+		},
+		{
+			"name": "Delete Plan JWT",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							""
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"auth": {
+					"type": "basic",
+					"basic": [
+						{
+							"key": "username",
+							"value": "{{PUBLIC_KEY}}",
+							"type": "string"
+						},
+						{
+							"key": "showPassword",
+							"value": false,
+							"type": "boolean"
+						}
+					]
+				},
+				"method": "POST",
+				"header": [
+					{
+						"key": "Content-Type",
+						"value": "application/json"
+					},
+					{
+						"key": "type",
+						"value": "sdk"
+					},
+					{
+						"key": "Accept",
+						"value": "application/json"
+					}
+				],
+				"url": {
+					"raw": "{{BASE_URL}}/recurring/v1/plan/remove/{{id_plan}}",
+					"host": [
+						"{{BASE_URL}}"
+					],
+					"path": [
+						"recurring",
+						"v1",
+						"plan",
+						"remove",
+						"{{id_plan}}"
+					]
+				},
+				"description": "$token = $epayco->token->create(array(\r\n    \"card[number]\" => '4575623182290326',\r\n    \"card[exp_year]\" => \"2017\",\r\n    \"card[exp_month]\" => \"07\",\r\n    \"card[cvc]\" => \"123\"\r\n));"
+			},
+			"response": []
+		},
+		{
+			"name": "Create Subscription JWT",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"type": "text/javascript",
+						"exec": [
+							"var data = JSON.parse(responseBody);",
+							"postman.setEnvironmentVariable(\"id_subscription\", data.id);"
+						]
+					}
+				}
+			],
+			"request": {
+				"auth": {
+					"type": "bearer",
+					"bearer": [
+						{
+							"key": "token",
+							"value": "{{jwt_token}}",
+							"type": "string"
+						}
+					]
+				},
+				"method": "POST",
+				"header": [
+					{
+						"key": "Content-Type",
+						"value": "application/json"
+					},
+					{
+						"key": "type",
+						"value": "sdk-jwt"
+					},
+					{
+						"key": "Accept",
+						"value": "application/json"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n\t\"id_plan\": \"{{id_plan}}\",\r\n\t\"customer\": \"{{id_client}}\",\r\n\t\"token_card\": \"{{id_token}}\",\r\n\t\"doc_type\": \"CC\",\r\n\t\"doc_number\": \"5234567\"\r\n}"
+				},
+				"url": {
+					"raw": "{{BASE_URL}}/recurring/v1/subscription/create",
+					"host": [
+						"{{BASE_URL}}"
+					],
+					"path": [
+						"recurring",
+						"v1",
+						"subscription",
+						"create"
+					]
+				},
+				"description": "$token = $epayco->token->create(array(\r\n    \"card[number]\" => '4575623182290326',\r\n    \"card[exp_year]\" => \"2017\",\r\n    \"card[exp_month]\" => \"07\",\r\n    \"card[cvc]\" => \"123\"\r\n));"
+			},
+			"response": []
+		},
+		{
+			"name": "Update Subscription JWT",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"type": "text/javascript",
+						"exec": [
+							"var data = JSON.parse(responseBody);",
+							"postman.setEnvironmentVariable(\"id_subscription\", data.id);"
+						]
+					}
+				}
+			],
+			"request": {
+				"auth": {
+					"type": "bearer",
+					"bearer": [
+						{
+							"key": "token",
+							"value": "{{jwt_token}}",
+							"type": "string"
+						}
+					]
+				},
+				"method": "POST",
+				"header": [
+					{
+						"key": "Content-Type",
+						"value": "application/json"
+					},
+					{
+						"key": "type",
+						"value": "sdk-jwt"
+					},
+					{
+						"key": "Accept",
+						"value": "application/json"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n\t\"id_plan\": \"{{id_plan}}\",\r\n\t\"customer\": \"{{id_client}}\",\r\n\t\"token_card\": \"{{id_token}}\",\r\n\t\"doc_type\": \"CC\",\r\n\t\"doc_number\": \"5234567\"\r\n}"
+				},
+				"url": {
+					"raw": "{{BASE_URL}}/recurring/v1/subscription/create",
+					"host": [
+						"{{BASE_URL}}"
+					],
+					"path": [
+						"recurring",
+						"v1",
+						"subscription",
+						"create"
+					]
+				},
+				"description": "$token = $epayco->token->create(array(\r\n    \"card[number]\" => '4575623182290326',\r\n    \"card[exp_year]\" => \"2017\",\r\n    \"card[exp_month]\" => \"07\",\r\n    \"card[cvc]\" => \"123\"\r\n));"
+			},
+			"response": []
+		},
+		{
+			"name": "Cancel Subscription JWT",
+			"request": {
+				"auth": {
+					"type": "bearer",
+					"bearer": [
+						{
+							"key": "token",
+							"value": "{{jwt_token}}",
+							"type": "string"
+						}
+					]
+				},
+				"method": "POST",
+				"header": [
+					{
+						"key": "Content-Type",
+						"value": "application/json"
+					},
+					{
+						"key": "type",
+						"value": "sdk-jwt"
+					},
+					{
+						"key": "Accept",
+						"value": "application/json"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n\t\"id\": \"{{id_subscription}}\"\r\n}"
+				},
+				"url": {
+					"raw": "{{BASE_URL}}/recurring/v1/subscription/cancel",
+					"host": [
+						"{{BASE_URL}}"
+					],
+					"path": [
+						"recurring",
+						"v1",
+						"subscription",
+						"cancel"
+					]
+				},
+				"description": "$token = $epayco->token->create(array(\r\n    \"card[number]\" => '4575623182290326',\r\n    \"card[exp_year]\" => \"2017\",\r\n    \"card[exp_month]\" => \"07\",\r\n    \"card[cvc]\" => \"123\"\r\n));"
+			},
+			"response": []
+		},
+		{
+			"name": "Pay Subscription JWT",
+			"request": {
+				"auth": {
+					"type": "bearer",
+					"bearer": [
+						{
+							"key": "token",
+							"value": "{{jwt_token}}",
+							"type": "string"
+						}
+					]
+				},
+				"method": "POST",
+				"header": [
+					{
+						"key": "Content-Type",
+						"value": "application/json"
+					},
+					{
+						"key": "type",
+						"value": "sdk-jwt"
+					},
+					{
+						"key": "Accept",
+						"value": "application/json"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n\t\"id_plan\": \"{{id_plan}}\",\r\n\t\"customer\": \"{{id_client}}\",\r\n\t\"token_card\": \"{{id_token}}\",\r\n\t\"doc_type\": \"CC\",\r\n\t\"doc_number\": \"124589276\",\r\n\t\"test\": false\r\n}"
+				},
+				"url": {
+					"raw": "{{BASE_URL}}/payment/v1/charge/subscription/create",
+					"host": [
+						"{{BASE_URL}}"
+					],
+					"path": [
+						"payment",
+						"v1",
+						"charge",
+						"subscription",
+						"create"
+					]
+				},
+				"description": "$token = $epayco->token->create(array(\r\n    \"card[number]\" => '4575623182290326',\r\n    \"card[exp_year]\" => \"2017\",\r\n    \"card[exp_month]\" => \"07\",\r\n    \"card[cvc]\" => \"123\"\r\n));"
+			},
+			"response": []
+		},
+		{
+			"name": "Create Payment JWT",
+			"request": {
+				"auth": {
+					"type": "bearer",
+					"bearer": [
+						{
+							"key": "token",
+							"value": "{{jwt_token}}",
+							"type": "string"
+						}
+					]
+				},
+				"method": "POST",
+				"header": [
+					{
+						"key": "Content-Type",
+						"value": "application/json"
+					},
+					{
+						"key": "type",
+						"value": "sdk-jwt"
+					},
+					{
+						"key": "Accept",
+						"value": "application/json"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{ \"test\":\"false\",\r\n  \"token_card\": \"{{id_token}}\",\r\n  \"customer_id\": \"ID_CUSTOMER_EN_SU_COMERCIO_DHDG1454\",\r\n  \"bill\": \"dsfdfsd\",\r\n  \"description\": \"Payment Test\",\r\n  \"value\": \"119000\",\r\n  \"tax\": \"19000\",\r\n  \"tax_base\": \"100000\",\r\n  \"currency\": \"COP\",\r\n  \"dues\": \"12\", \r\n  \"doc_type\": \"CC\",\r\n  \"doc_number\": \"121412232\",\r\n  \"ip\": \"::1\",\r\n  \"name\": \"Joe\",\r\n  \"last_name\": \"Doe Test\",\r\n  \"email\": \"joe_doe@payco.co\",\r\n  \"phone\": \"1234567899\",\r\n  \"cell_phone\": \"1234567899\",\r\n  \"address\": \"cr 45 66 77\",\r\n  \"city\": \"Bogota\",\r\n  \"country\": \"CO\",\r\n  \"url_response\":\"https:\\/\\/tudominio.com\\/respuesta.php\",\r\n  \"url_confirmation\":\"https:\\/\\/tudominio.com\\/confirmacion.php\",\r\n  \"extras\":{\r\n        \"extra1\":\"prueba json extra1\",\r\n        \"extra2\":\"prueba json extra2\",\r\n        \"extra3\":\"prueba json extra3\",\r\n        \"extra4\":\"prueba json extra4\",\r\n        \"extra5\":\"prueba json extra5\",\r\n        \"extra6\":\"prueba json extra6\",\r\n        \"extra7\":\"prueba json extra7\",\r\n        \"extra8\":\"prueba json extra8\",\r\n        \"extra9\":\"prueba json extra9\"\r\n    \r\n    }\r\n}"
+				},
+				"url": {
+					"raw": "{{BASE_URL}}/payment/v1/charge/create",
+					"host": [
+						"{{BASE_URL}}"
+					],
+					"path": [
+						"payment",
+						"v1",
+						"charge",
+						"create"
+					]
+				},
+				"description": "$token = $epayco->token->create(array(\r\n    \"card[number]\" => '4575623182290326',\r\n    \"card[exp_year]\" => \"2017\",\r\n    \"card[exp_month]\" => \"07\",\r\n    \"card[cvc]\" => \"123\"\r\n));"
+			},
+			"response": []
+		},
+		{
+			"name": "Get Subscription JWT",
+			"request": {
+				"auth": {
+					"type": "bearer",
+					"bearer": [
+						{
+							"key": "token",
+							"value": "{{jwt_token}}",
+							"type": "string"
+						}
+					]
+				},
+				"method": "GET",
+				"header": [
+					{
+						"key": "Content-Type",
+						"value": "application/json"
+					},
+					{
+						"key": "type",
+						"value": "sdk-jwt"
+					},
+					{
+						"key": "Accept",
+						"value": "application/json"
+					},
+					{
+						"key": "Authorization",
+						"value": "Basic MTMyNzAzZDI3OTkyNTFhM2E1YjA1MTc0YjQ3MDU0ZGU6"
+					}
+				],
+				"url": {
+					"raw": "{{BASE_URL}}/recurring/v1/subscription/{{id_subscription}}",
+					"host": [
+						"{{BASE_URL}}"
+					],
+					"path": [
+						"recurring",
+						"v1",
+						"subscription",
+						"{{id_subscription}}"
+					]
+				},
+				"description": "$token = $epayco->token->create(array(\r\n    \"card[number]\" => '4575623182290326',\r\n    \"card[exp_year]\" => \"2017\",\r\n    \"card[exp_month]\" => \"07\",\r\n    \"card[cvc]\" => \"123\"\r\n));"
+			},
+			"response": []
+		},
+		{
+			"name": "Get All Subscriptions JWT",
+			"request": {
+				"auth": {
+					"type": "bearer",
+					"bearer": [
+						{
+							"key": "token",
+							"value": "{{jwt_token}}",
+							"type": "string"
+						}
+					]
+				},
+				"method": "GET",
+				"header": [
+					{
+						"key": "Content-Type",
+						"value": "application/json"
+					},
+					{
+						"key": "type",
+						"value": "sdk-jwt"
+					},
+					{
+						"key": "Accept",
+						"value": "application/json"
+					},
+					{
+						"key": "Authorization",
+						"value": "Basic {{jwt_token}}",
+						"disabled": true
+					}
+				],
+				"url": {
+					"raw": "{{BASE_URL}}/recurring/v1/subscriptions",
+					"host": [
+						"{{BASE_URL}}"
+					],
+					"path": [
+						"recurring",
+						"v1",
+						"subscriptions"
+					]
+				},
+				"description": "$token = $epayco->token->create(array(\r\n    \"card[number]\" => '4575623182290326',\r\n    \"card[exp_year]\" => \"2017\",\r\n    \"card[exp_month]\" => \"07\",\r\n    \"card[cvc]\" => \"123\"\r\n));"
+			},
+			"response": []
+		},
+		{
+			"name": "consultar todos los planes",
+			"request": {
+				"method": "GET",
+				"header": [
+					{
+						"key": "Content-Type",
+						"value": "application/json",
+						"type": "text"
+					},
+					{
+						"key": "type",
+						"value": "sdk-jwt",
+						"type": "text"
+					},
+					{
+						"key": "Accept",
+						"value": "application/json",
+						"type": "text"
+					},
+					{
+						"key": "",
+						"value": "Bearer eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJpc3MiOiJhcGlmeWVQYXljb0pXVCIsInN1YiI6NDk3MjU4LCJpYXQiOjE2MjgxMzM5OTMsImV4cCI6MTYyODEzNzU5MywicmFuZCI6ImJhYTc3ZWI5MTIwNjAzNTZkN2NiN2NhZjdkYTI0YTBlODQ0NyJ9.o4iOgJDffgADqe3OrzmtKSlI0qoFkwm3OsNlexxFKyE",
+						"type": "text",
+						"disabled": true
+					},
+					{
+						"key": "Authorization",
+						"value": "Bearer eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJpc3MiOiJhcGlTdXNjcmlwY2lvbmVzTHVtZW5KV1QiLCJzdWIiOnsiY2xpZW50ZUlkIjo0OTcyNTgsInB1X2tleSI6IjRGRUl3UE5sSjVoTktCanA1MFFDQmk3YlRPM3VBeU1icjdBZ1RrVGlhWVF6XC9GUmljRTFWQlUzREdWRnhBMDk2IiwicGlfa2V5IjoiQW95M1diY3ZQREdxR2tia29DVFFma1Q1T0NpYUY4NndzQWVhbVdPQjhwbmIrK0Rob1d4a2NqajBaMzJqRnpvSCJ9LCJpYXQiOjE2MjgxMzQwODIsImV4cCI6MTYyODEzNzY4MiwicmFuZCI6ImUyYmY0ZmQ2N2YxZmFiYWE0Mjk4ZjcwNDNmMzYwZjdlMTA0OSJ9.OCczfx_yjTTORGt1qLBpWTGehu_OeZIru9bt9AZK6ik",
+						"type": "text"
+					}
+				],
+				"url": {
+					"raw": "https://api.secure.payco.co/recurring/v1/plans/92454a681c05c885e7f68879544a31b4/",
+					"protocol": "https",
+					"host": [
+						"api",
+						"secure",
+						"payco",
+						"co"
+					],
+					"path": [
+						"recurring",
+						"v1",
+						"plans",
+						"92454a681c05c885e7f68879544a31b4",
+						""
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Pagos en efectivo API",
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "Content-Type",
+						"value": "application/json",
+						"type": "text"
+					},
+					{
+						"key": "type",
+						"value": "sdk-jwt",
+						"type": "text"
+					},
+					{
+						"key": "Accept",
+						"value": "application/json",
+						"type": "text"
+					},
+					{
+						"key": "",
+						"value": "Bearer eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJpc3MiOiJhcGlmeWVQYXljb0pXVCIsInN1YiI6NDk3MjU4LCJpYXQiOjE2MjgxMzM5OTMsImV4cCI6MTYyODEzNzU5MywicmFuZCI6ImJhYTc3ZWI5MTIwNjAzNTZkN2NiN2NhZjdkYTI0YTBlODQ0NyJ9.o4iOgJDffgADqe3OrzmtKSlI0qoFkwm3OsNlexxFKyE",
+						"type": "text",
+						"disabled": true
+					},
+					{
+						"key": "Authorization",
+						"value": "Bearer eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJpc3MiOiJhcGlTdXNjcmlwY2lvbmVzTHVtZW5KV1QiLCJzdWIiOnsiY2xpZW50ZUlkIjo0OTcyNTgsInB1X2tleSI6IjRGRUl3UE5sSjVoTktCanA1MFFDQmk3YlRPM3VBeU1icjdBZ1RrVGlhWVF6XC9GUmljRTFWQlUzREdWRnhBMDk2IiwicGlfa2V5IjoiQW95M1diY3ZQREdxR2tia29DVFFma1Q1T0NpYUY4NndzQWVhbVdPQjhwbmIrK0Rob1d4a2NqajBaMzJqRnpvSCJ9LCJpYXQiOjE2MjgxMzQwODIsImV4cCI6MTYyODEzNzY4MiwicmFuZCI6ImUyYmY0ZmQ2N2YxZmFiYWE0Mjk4ZjcwNDNmMzYwZjdlMTA0OSJ9.OCczfx_yjTTORGt1qLBpWTGehu_OeZIru9bt9AZK6ik",
+						"type": "text"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n    \"factura\":\"12332113\",\r\n    \"descripcion\":\"pago en efectivo\",\r\n    \"valor\":\"23320\",\r\n    \"iva\":\"0\",\r\n    \"baseiva\":\"0\",\r\n    \"moneda\":\"cop\",\r\n    \"tipo_persona\":\"1\",\r\n    \"tipo_doc\":\"CC\",\r\n    \"documento\":\"10000020\",\r\n    \"nombres\":\"nombres\",\r\n    \"apellidos\":\"apellidos\",\r\n    \"email\":\"examplemail.com\",\r\n    \"pais\":\"CO\",\r\n    \"depto\":\"Antioquia\",\r\n    \"ciudad\":\"Medellin\",\r\n    \"celular\":\"*******\",\r\n    \"direccion\":\"*******\",\r\n    \"ip\":\"190.000.000.0\",\r\n    \"url_respuesta\":\"\",\r\n    \"url_confirmacion\":\"\",\r\n    \"metodoconfirmacion\":\"POST\",\r\n    \"fechaexpiracion\":\"2021-09-03\",\r\n    // \"test\":\"FALSE\", variable antigua\r\n    \"enpruebas\":\"false\", //variable actual\r\n    \"public_key\":\"d42ae82ca25bd9b0f3877a574183c4d7\"\r\n}"
+				},
+				"url": {
+					"raw": "https://secure.payco.co/restpagos/v2/efectivo/efecty",
+					"protocol": "https",
+					"host": [
+						"secure",
+						"payco",
+						"co"
+					],
+					"path": [
+						"restpagos",
+						"v2",
+						"efectivo",
+						"efecty"
+					]
+				}
+			},
+			"response": []
+		}
+	]
+}

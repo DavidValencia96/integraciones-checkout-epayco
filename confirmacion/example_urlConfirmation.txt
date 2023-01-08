@@ -1,0 +1,1 @@
+Este es un ejemplo basico sobre como recibir los parametros que retorna epayco en la url de confirmación.

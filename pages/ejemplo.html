@@ -1,0 +1,68 @@
+<form id="FormPago">
+    <h5>Recuerda rellenar todos los campos !</h5>
+
+    <label for="nombre">Nombre estudiante: *</label>
+    <input id="nombre" type="text" class="" ><br>
+    <label for="documento">N° Documento estudiante: *</label> 
+    <input id="documento" type="number" class="" > <br>
+    <label for="curso">Curso: *</label>
+    <input id="curso" type="text" class=""><br>
+    <input id="DatosForm" onclick="pagarAhora()" type="submit" value="Pagar ahora" class="">
+            
+    <script>
+        document.getElementById("DatosForm").onclick = pagarAhora;
+        document.addEventListener("DOMContentLoaded", function() {
+            document.getElementById("FormPago").addEventListener('submit', pagarAhora); 
+        });
+
+        function pagarAhora(e) {
+            e.preventDefault();
+            var nombre = document.getElementById("nombre").value;
+            var documento = document.getElementById("documento").value;
+            var curso = document.getElementById("curso").value;
+            
+            // Validación de campos
+            if(nombre.length == 0) {
+                alert('El campo "Nombre Estudiante" no puede ir en blanco o vacio');
+                return;
+            }
+            if (documento.length == 0) {
+                alert('El campo "N° Documento estudiante" no puede ir en blanco o vacio');
+                return;
+            }
+            if(curso.length == 0) {
+                alert('El campo Curso" no puede ir en blanco o vacio');
+                return;
+            }
+
+            var handler = ePayco.checkout.configure({
+                key: "Aqui la llave publica", //public_key la sacan del dashboard llaves API
+                test: false,
+            });
+            var data = {
+                //Parametros compra (obligatorio)
+                name: "Nombre estudiante: "+nombre+" - Colegio: XXXXX - Programa: XXXXX - Destino: XXXXX -- Código: XXXXXXXXXX",
+                description: "Nombre estudiante: "+nombre+" - Colegio: XXXXX - Programa: XXXXX - Destino: XXXXX -- Código: XXXXXXXXXX",
+                currency: "cop",
+                amount: "20000", //Aqui el valor total a pagar incluyendo IVA ((el valor del producto + iva))
+                tax_base: "0",  //Aqui el valor a pagar SIN IVA
+                tax: "0",  // Aqui el IVA del producto
+                country: "co",
+                lang: "en",
+                //Onpage="false" - Standard="true"
+                external: "true",
+                //Atributos opcionales
+                extra1: "Nombre estudiante: "+nombre,
+                extra2: "Documento estudiante: "+documento,
+                extra3: "Curso estudiante: "+curso,
+                confirmation: "url de confirmación",
+                response: "url de respuesta",
+                method: "POST",
+            };
+            console.log(data);
+            handler.open(data);
+        }
+    </script>
+</form>
+
+<script type="text/javascript" src="https://checkout.epayco.co/checkout.js"></script>
